@@ -1,7 +1,7 @@
 # -*- coding: utf-8-*-
 import json
 from aip import AipSpeech
-from .sdk import TencentSpeech, AliSpeech, XunfeiSpeech, BaiduSpeech
+from .sdk import BaiduSpeech #  TencentSpeech, AliSpeech, XunfeiSpeech,
 from . import utils, config
 from robot import logging
 from abc import ABCMeta, abstractmethod
@@ -80,83 +80,83 @@ class BaiduASR(AbstractASR):
             return ''
 
 
-class TencentASR(AbstractASR):
-    """
-    腾讯的语音识别API.
-    """
+# class TencentASR(AbstractASR):
+#     """
+#     腾讯的语音识别API.
+#     """
 
-    SLUG = "tencent-asr"
+#     SLUG = "tencent-asr"
 
-    def __init__(self, appid, secretid, secret_key, region='ap-guangzhou', **args):
-        super(self.__class__, self).__init__()
-        self.engine = TencentSpeech.tencentSpeech(secret_key, secretid)
-        self.region = region
+#     def __init__(self, appid, secretid, secret_key, region='ap-guangzhou', **args):
+#         super(self.__class__, self).__init__()
+#         self.engine = TencentSpeech.tencentSpeech(secret_key, secretid)
+#         self.region = region
 
-    @classmethod
-    def get_config(cls):
-        # Try to get tencent_yuyin config from config
-        return config.get('tencent_yuyin', {})
+#     @classmethod
+#     def get_config(cls):
+#         # Try to get tencent_yuyin config from config
+#         return config.get('tencent_yuyin', {})
 
-    def transcribe(self, fp):
-        mp3_path = utils.convert_wav_to_mp3(fp)
-        r = self.engine.ASR(mp3_path, 'mp3', '1', self.region)
-        utils.check_and_delete(mp3_path)
-        res = json.loads(r)
-        if 'Response' in res and 'Result' in res['Response']:
-            logger.info('{} 语音识别到了：{}'.format(self.SLUG, res['Response']['Result']))
-            return res['Response']['Result']
-        else:
-            logger.critical('{} 语音识别出错了'.format(self.SLUG), exc_info=True)
-            return ''
-
-
-class XunfeiASR(AbstractASR):
-    """
-    科大讯飞的语音识别API.
-    外网ip查询：https://ip.51240.com/
-    """
-
-    SLUG = "xunfei-asr"
-
-    def __init__(self, appid, api_key, api_secret, **args):
-        super(self.__class__, self).__init__()
-        self.appid = appid
-        self.api_key = api_key
-        self.api_secret = api_secret
-
-    @classmethod
-    def get_config(cls):
-        # Try to get xunfei_yuyin config from config
-        return config.get('xunfei_yuyin', {})
-
-    def transcribe(self, fp):
-        return XunfeiSpeech.transcribe(fp, self.appid, self.api_key, self.api_secret)
+#     def transcribe(self, fp):
+#         mp3_path = utils.convert_wav_to_mp3(fp)
+#         r = self.engine.ASR(mp3_path, 'mp3', '1', self.region)
+#         utils.check_and_delete(mp3_path)
+#         res = json.loads(r)
+#         if 'Response' in res and 'Result' in res['Response']:
+#             logger.info('{} 语音识别到了：{}'.format(self.SLUG, res['Response']['Result']))
+#             return res['Response']['Result']
+#         else:
+#             logger.critical('{} 语音识别出错了'.format(self.SLUG), exc_info=True)
+#             return ''
 
 
-class AliASR(AbstractASR):
-    """
-    阿里的语音识别API.
-    """
+# class XunfeiASR(AbstractASR):
+#     """
+#     科大讯飞的语音识别API.
+#     外网ip查询：https://ip.51240.com/
+#     """
 
-    SLUG = "ali-asr"
+#     SLUG = "xunfei-asr"
 
-    def __init__(self, appKey, token, **args):
-        super(self.__class__, self).__init__()
-        self.appKey, self.token = appKey, token
+#     def __init__(self, appid, api_key, api_secret, **args):
+#         super(self.__class__, self).__init__()
+#         self.appid = appid
+#         self.api_key = api_key
+#         self.api_secret = api_secret
 
-    @classmethod
-    def get_config(cls):
-        # Try to get ali_yuyin config from config
-        return config.get('ali_yuyin', {})
+#     @classmethod
+#     def get_config(cls):
+#         # Try to get xunfei_yuyin config from config
+#         return config.get('xunfei_yuyin', {})
 
-    def transcribe(self, fp):
-        result = AliSpeech.asr(self.appKey, self.token, fp)
-        if result is not None:
-            logger.info('{} 语音识别到了：{}'.format(self.SLUG, result))
-            return result
-        else:
-            logger.critical('{} 语音识别出错了'.format(self.SLUG), exc_info=True)
-            return ''
+#     def transcribe(self, fp):
+#         return XunfeiSpeech.transcribe(fp, self.appid, self.api_key, self.api_secret)
+
+
+# class AliASR(AbstractASR):
+#     """
+#     阿里的语音识别API.
+#     """
+
+#     SLUG = "ali-asr"
+
+#     def __init__(self, appKey, token, **args):
+#         super(self.__class__, self).__init__()
+#         self.appKey, self.token = appKey, token
+
+#     @classmethod
+#     def get_config(cls):
+#         # Try to get ali_yuyin config from config
+#         return config.get('ali_yuyin', {})
+
+#     def transcribe(self, fp):
+#         result = AliSpeech.asr(self.appKey, self.token, fp)
+#         if result is not None:
+#             logger.info('{} 语音识别到了：{}'.format(self.SLUG, result))
+#             return result
+#         else:
+#             logger.critical('{} 语音识别出错了'.format(self.SLUG), exc_info=True)
+#             return ''
 
 
 def get_engine_by_slug(slug=None):

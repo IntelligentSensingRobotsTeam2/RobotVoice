@@ -10,7 +10,7 @@ from pathlib import Path
 from pypinyin import lazy_pinyin
 from pydub import AudioSegment
 from abc import ABCMeta, abstractmethod
-from .sdk import TencentSpeech, AliSpeech, XunfeiSpeech, atc
+from .sdk import  atc # TencentSpeech, AliSpeech, XunfeiSpeech,
 
 logger = logging.getLogger(__name__)
 
@@ -154,88 +154,88 @@ class BaiduTTS(AbstractTTS):
             logger.critical('{} 合成失败！'.format(self.SLUG), exc_info=True)
 
 
-class TencentTTS(AbstractTTS):
-    """
-    腾讯的语音合成
-    region: 服务地域，挑个离自己最近的区域有助于提升速度。
-        有效值：https://cloud.tencent.com/document/api/441/17365#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8
-    voiceType:
-        - 0：女声1，亲和风格(默认)
-        - 1：男声1，成熟风格
-        - 2：男声2，成熟风格
-    language:
-        - 1: 中文，最大100个汉字（标点符号算一个汉子）
-        - 2: 英文，最大支持400个字母（标点符号算一个字母）
-    """
+# class TencentTTS(AbstractTTS):
+#     """
+#     腾讯的语音合成
+#     region: 服务地域，挑个离自己最近的区域有助于提升速度。
+#         有效值：https://cloud.tencent.com/document/api/441/17365#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8
+#     voiceType:
+#         - 0：女声1，亲和风格(默认)
+#         - 1：男声1，成熟风格
+#         - 2：男声2，成熟风格
+#     language:
+#         - 1: 中文，最大100个汉字（标点符号算一个汉子）
+#         - 2: 英文，最大支持400个字母（标点符号算一个字母）
+#     """
 
-    SLUG = "tencent-tts"
+#     SLUG = "tencent-tts"
 
-    def __init__(self, appid, secretid, secret_key, region='ap-guangzhou', voiceType=0, language=1, **args):
-        super(self.__class__, self).__init__()
-        self.engine = TencentSpeech.tencentSpeech(secret_key, secretid)
-        self.region, self.voiceType, self.language = region, voiceType, language
+#     def __init__(self, appid, secretid, secret_key, region='ap-guangzhou', voiceType=0, language=1, **args):
+#         super(self.__class__, self).__init__()
+#         self.engine = TencentSpeech.tencentSpeech(secret_key, secretid)
+#         self.region, self.voiceType, self.language = region, voiceType, language
 
-    @classmethod
-    def get_config(cls):
-        # Try to get tencent_yuyin config from config
-        return config.get('tencent_yuyin', {})
+#     @classmethod
+#     def get_config(cls):
+#         # Try to get tencent_yuyin config from config
+#         return config.get('tencent_yuyin', {})
                 
-    def get_speech(self, phrase):
-        result = self.engine.TTS(phrase, self.voiceType, self.language, self.region)
-        if 'Response' in result and 'Audio' in result['Response']:
-            audio = result['Response']['Audio']
-            data = base64.b64decode(audio)
-            tmpfile = utils.write_temp_file(data, '.wav')
-            logger.info('{} 语音合成成功，合成路径：{}'.format(self.SLUG, tmpfile))
-            return tmpfile
-        else:
-            logger.critical('{} 合成失败！'.format(self.SLUG), exc_info=True)
+#     def get_speech(self, phrase):
+#         result = self.engine.TTS(phrase, self.voiceType, self.language, self.region)
+#         if 'Response' in result and 'Audio' in result['Response']:
+#             audio = result['Response']['Audio']
+#             data = base64.b64decode(audio)
+#             tmpfile = utils.write_temp_file(data, '.wav')
+#             logger.info('{} 语音合成成功，合成路径：{}'.format(self.SLUG, tmpfile))
+#             return tmpfile
+#         else:
+#             logger.critical('{} 合成失败！'.format(self.SLUG), exc_info=True)
 
 
-class XunfeiTTS(AbstractTTS):
-    """
-    科大讯飞的语音识别API.
-    """
+# class XunfeiTTS(AbstractTTS):
+#     """
+#     科大讯飞的语音识别API.
+#     """
 
-    SLUG = "xunfei-tts"
+#     SLUG = "xunfei-tts"
 
-    def __init__(self, appid, api_key, api_secret, voice='xiaoyan'):
-        super(self.__class__, self).__init__()
-        self.appid, self.api_key, self.api_secret, self.voice_name = appid, api_key, api_secret, voice
+#     def __init__(self, appid, api_key, api_secret, voice='xiaoyan'):
+#         super(self.__class__, self).__init__()
+#         self.appid, self.api_key, self.api_secret, self.voice_name = appid, api_key, api_secret, voice
 
-    @classmethod
-    def get_config(cls):
-        # Try to get xunfei_yuyin config from config
-        return config.get('xunfei_yuyin', {})     
+#     @classmethod
+#     def get_config(cls):
+#         # Try to get xunfei_yuyin config from config
+#         return config.get('xunfei_yuyin', {})     
 
-    def get_speech(self, phrase):
-        return XunfeiSpeech.synthesize(phrase, self.appid, self.api_key, self.api_secret, self.voice_name)
+#     def get_speech(self, phrase):
+#         return XunfeiSpeech.synthesize(phrase, self.appid, self.api_key, self.api_secret, self.voice_name)
 
 
-class AliTTS(AbstractTTS):
-    """
-    阿里的TTS
-    voice: 发音人，默认是 xiaoyun
-        全部发音人列表：https://help.aliyun.com/document_detail/84435.html?spm=a2c4g.11186623.2.24.67ce5275q2RGsT
-    """
-    SLUG = "ali-tts"
+# class AliTTS(AbstractTTS):
+#     """
+#     阿里的TTS
+#     voice: 发音人，默认是 xiaoyun
+#         全部发音人列表：https://help.aliyun.com/document_detail/84435.html?spm=a2c4g.11186623.2.24.67ce5275q2RGsT
+#     """
+#     SLUG = "ali-tts"
 
-    def __init__(self, appKey, token, voice='xiaoyun', **args):
-        super(self.__class__, self).__init__()
-        self.appKey, self.token, self.voice = appKey, token, voice
+#     def __init__(self, appKey, token, voice='xiaoyun', **args):
+#         super(self.__class__, self).__init__()
+#         self.appKey, self.token, self.voice = appKey, token, voice
 
-    @classmethod
-    def get_config(cls):
-        # Try to get ali_yuyin config from config
-        return config.get('ali_yuyin', {})
+#     @classmethod
+#     def get_config(cls):
+#         # Try to get ali_yuyin config from config
+#         return config.get('ali_yuyin', {})
                 
-    def get_speech(self, phrase):
-        tmpfile = AliSpeech.tts(self.appKey, self.token, self.voice, phrase)
-        if tmpfile is not None:
-            logger.info('{} 语音合成成功，合成路径：{}'.format(self.SLUG, tmpfile))
-            return tmpfile
-        else:
-            logger.critical('{} 合成失败！'.format(self.SLUG), exc_info=True)
+#     def get_speech(self, phrase):
+#         tmpfile = AliSpeech.tts(self.appKey, self.token, self.voice, phrase)
+#         if tmpfile is not None:
+#             logger.info('{} 语音合成成功，合成路径：{}'.format(self.SLUG, tmpfile))
+#             return tmpfile
+#         else:
+#             logger.critical('{} 合成失败！'.format(self.SLUG), exc_info=True)
 
 def get_engine_by_slug(slug=None):
     """
