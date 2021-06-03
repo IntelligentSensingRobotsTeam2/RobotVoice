@@ -158,9 +158,6 @@ def getSay(parsed, intent=''):
 
 
 if __name__ == '__main__':
-    parsed = getUnit('北京今天的天气如何', "S51781", 'yV4AsTjGuF1sbRMWG0BHNOPE', 'k615Ss9qldIatR7ZuLqL6M1rySIKS6Wq')
-    keywords = ['USER_WEATHER','USER_TEMP','USER_RAIN','USER_HIGH_TEMP','USER_LOW_TEMP']
-    for kw in keywords:
-        if hasIntent(parsed,kw):
-            print(getSay(parsed))
-            break
+    parsed = getUnit('广州现在确诊人数多少', "S51781", 'yV4AsTjGuF1sbRMWG0BHNOPE', 'k615Ss9qldIatR7ZuLqL6M1rySIKS6Wq')
+    
+    print(getSay(parsed)[:-8])

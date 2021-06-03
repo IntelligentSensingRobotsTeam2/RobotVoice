@@ -19,6 +19,12 @@ from robot.Conversation import Conversation
 from robot.ConfigMonitor import ConfigMonitor
 from robot import config, utils, constants, logging, statistic, Player, BCI
 from cmdRecv import cmdServer
+# DOA angle
+from cmdRecv.tuning import Tuning
+from cmdRecv import sendCmd_test
+import usb.core
+import usb.util
+import time
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -48,6 +54,10 @@ class Wukong(object):
 
 
         config.init()
+
+        dev = usb.core.find(idVendor=0x2886, idProduct=0x0018)
+        self.Mic_tuning = Tuning(dev)
+
         self._conversation = Conversation(self._profiling)
 
         self.helloStr = '{} 你好！我叫{}！试试对我喊唤醒词叫醒我吧'.format(config.get('first_name', '主人'),config.getName())
@@ -67,10 +77,15 @@ class Wukong(object):
             thread.start_new_thread(self._loop_event, ())
 
     def _loop_event(self):
+    
         while True:
             self._wakeup.wait()
+            # print('1',Mic_tuning.direction)
+            print('test')
+            logger.info('logger test')
             self._conversation.interrupt()
             query = self._conversation.activeListen()
+            # print('2',Mic_tuning.direction)
             self._conversation.doResponse(query)
             self._wakeup.clear()
 
@@ -83,6 +98,9 @@ class Wukong(object):
 
     def _detected_callback(self):
         def start_record():
+            arr_angle = self.Mic_tuning.direction
+            print('arrive angle:',arr_angle)
+            sendCmd_test.send_data('angle:{}'.format(arr_angle))
             logger.info('开始录音')
             self._conversation.isRecording = True
             utils.setRecordable(True)
