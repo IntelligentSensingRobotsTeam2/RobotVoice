@@ -199,7 +199,7 @@ class AnyQRobot(AbstractRobot):
         except Exception:
             logger.critical("AnyQ robot failed to response for %r",
                                   msg, exc_info=True)
-            return "抱歉, 我的大脑短路了，请稍后再试试."
+            return "抱歉,我还不会这个，您可以去咨询台问问."
 
 
 def get_unknown_response():

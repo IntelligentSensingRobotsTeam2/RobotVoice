@@ -38,7 +38,7 @@ LED:
 # snowboy 离线唤醒
 # 建议使用 snowboy-seasalt (https://github.com/rhasspy/snowboy-seasalt)
 # 使用相同环境录入你的语音，以提升唤醒成功率和准确率
-hotword: 'snowboy.umdl'  # 唤醒词模型，如要自定义请放到 $HOME/.wukong 目录中
+hotword: 'wukong.pmdl'  # 唤醒词模型，如要自定义请放到 $HOME/.wukong 目录中
 sensitivity: 0.4  # 灵敏度
 silent_threshold: 15 # 判断为静音的阈值。环境比较吵杂的地方可以适当调大
 recording_timeout: 5 # 录制的语音最大长度（秒）
@@ -82,9 +82,9 @@ asr_engine: baidu-asr
 # http://yuyin.baidu.com/
 # 有免费额度限制，请使用自己的百度智能云账户
 baidu_yuyin:
-    appid: '9670645'
-    api_key: 'qg4haN8b2bGvFtCbBGqhrmZy'
-    secret_key: '585d4eccb50d306c401d7df138bb02e7'
+    appid: '24135769'
+    api_key: 'g1qFZpVacLsQQHjnx7mBsTGh'
+    secret_key: 'Km2VZvpfTT4HoMHdErtNTiaVv4ypuXLk'
     dev_pid: 1536   # 1536：普通话(支持简单的英文识别)，
                     # 1936: 普通话远场（需付费，请使用自己的百度语音账户再使用）
                     # 80001：ASR极速版（需付费，请使用自己的百度语音账户再使用）
@@ -146,9 +146,9 @@ unit:
     # 得到一个机器人 ID ，
     # 然后访问下面页面获取 API Key 和 Secret Key：
     # https://console.bce.baidu.com/ai/#/ai/unit/app/list
-    service_id: 'S13442'  # 机器人ID
-    api_key: 'w5v7gUV3iPGsGntcM84PtOOM'
-    secret_key: 'KffXwW6E1alcGplcabcNs63Li6GvvnfL'
+    service_id: '24229593'  # 机器人ID
+    api_key: 'yV4AsTjGuF1sbRMWG0BHNOPE'
+    secret_key: 'k615Ss9qldIatR7ZuLqL6M1rySIKS6Wq'
     
 
 # 聊天机器人

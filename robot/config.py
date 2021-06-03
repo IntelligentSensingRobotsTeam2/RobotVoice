@@ -131,7 +131,11 @@ def get(item='', default=None, warn=False):
             logger.debug("%s not specified in profile, defaulting to '%s'",
                          item, default)
         return default
-    
+
+def getName():
+    hotword = _config['hotword']
+    return hotword.split('.')[0]
+
 def getConfig():
     """
     返回全部配置数据

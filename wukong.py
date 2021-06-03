@@ -18,6 +18,7 @@ from watchdog.observers import Observer
 from robot.Conversation import Conversation
 from robot.ConfigMonitor import ConfigMonitor
 from robot import config, utils, constants, logging, statistic, Player, BCI
+from cmdRecv import cmdServer
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -44,9 +45,14 @@ class Wukong(object):
             如需退出，可以按 Ctrl-4 组合键
 
 '''.format(config.get('/server/host', '0.0.0.0'), config.get('/server/port', '5000')))
+
+
         config.init()
         self._conversation = Conversation(self._profiling)
-        self._conversation.say('{} 你好！试试对我喊唤醒词叫醒我吧'.format(config.get('first_name', '主人')), True)
+
+        self.helloStr = '{} 你好！我叫{}！试试对我喊唤醒词叫醒我吧'.format(config.get('first_name', '主人'),config.getName())
+        # self._conversation.say('{} 你好！试试对我喊唤醒词叫醒我吧'.format(config.get('first_name', '主人')), True)
+        self._conversation.say(self.helloStr, True)
         self._observer = Observer()
         event_handler = ConfigMonitor(self._conversation)
         self._observer.schedule(event_handler, constants.CONFIG_PATH, False)
@@ -69,6 +75,8 @@ class Wukong(object):
             self._wakeup.clear()
 
     def _signal_handler(self, signal, frame):
+        print('interupt')
+        self._conversation.say('请戴上口罩', True)
         self._interrupted = True
         utils.clean()
         self._observer.stop()
@@ -122,6 +130,8 @@ class Wukong(object):
 
         # site
         server.run(self._conversation, self)
+
+        cmdServer.run(self)
 
         statistic.report(0)
 
@@ -221,6 +231,7 @@ class Wukong(object):
         """
         重启 wukong-robot
         """
+        print('restart call..')
         logger.critical('程序重启...')
         try:
             self.detector.terminate()
