@@ -28,6 +28,7 @@ class Conversation(object):
         self.profiling = profiling
         self.onSay = None
         self.hasPardon = False
+        self.adminState = time.time()  ## admin verify time
 
     def getHistory(self):
         return self.history

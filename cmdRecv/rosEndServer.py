@@ -7,7 +7,7 @@ import socket,signal
 import fcntl, struct
 
 
-DEBUG = False   ## print debug information 
+DEBUG = True   ## print debug information 
 speaker =  None
 import time
 
@@ -43,7 +43,6 @@ def execute_config(data):
     elif cmd == 'admin':
         if speaker is not None:
             speaker.adminVerifyTime = curTime
-            speaker._conversation.adminState = time.time()
             if firstHello or curTime - lastHelloTime > 60:
                 speaker._conversation.say('管理员您好', True)
                 lastHelloTime = curTime
@@ -59,7 +58,7 @@ def start_server():
     ip = get_ip('ens33') ## 
     if DEBUG:
         print('current ip:{}'.format(ip))
-    PORT = 8000
+    PORT = 7000
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     address = (ip, PORT)  
     server_socket.bind(address)  

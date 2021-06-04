@@ -21,7 +21,7 @@ from robot import config, utils, constants, logging, statistic, Player, BCI
 from cmdRecv import cmdServer
 # DOA angle
 from cmdRecv.tuning import Tuning
-from cmdRecv import sendCmd_test
+from cmdRecv import udp_send
 import usb.core
 import usb.util
 import time
@@ -52,7 +52,6 @@ class Wukong(object):
 
 '''.format(config.get('/server/host', '0.0.0.0'), config.get('/server/port', '5000')))
 
-
         config.init()
 
         dev = usb.core.find(idVendor=0x2886, idProduct=0x0018)
@@ -64,6 +63,7 @@ class Wukong(object):
         # self._conversation.say('{} 你好！试试对我喊唤醒词叫醒我吧'.format(config.get('first_name', '主人')), True)
         self._conversation.say(self.helloStr, True)
         self._observer = Observer()
+        self.adminVerifyTime = time.time()  # last time of admin verified.
         event_handler = ConfigMonitor(self._conversation)
         self._observer.schedule(event_handler, constants.CONFIG_PATH, False)
         self._observer.schedule(event_handler, constants.DATA_PATH, False)
@@ -100,7 +100,7 @@ class Wukong(object):
         def start_record():
             arr_angle = self.Mic_tuning.direction
             print('arrive angle:',arr_angle)
-            sendCmd_test.send_data('angle:{}'.format(arr_angle))
+            udp_send.send_data('angle:{}'.format(arr_angle))
             logger.info('开始录音')
             self._conversation.isRecording = True
             utils.setRecordable(True)
