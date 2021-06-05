@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 import rospy
 from geometry_msgs.msg import Twist
@@ -16,7 +17,8 @@ PI = 3.1415926535897
 def rotate(angle):
     #Starts a new node
     rospy.init_node('robot_cleaner', anonymous=True)
-    velocity_publisher = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+    # velocity_publisher = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+    velocity_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
     vel_msg = Twist()
 
     # Receiveing the user's input
@@ -70,7 +72,8 @@ def get_ip(ifname):
     return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', bytes(ifname[:15],'utf-8')))[20:24])
 
 def start_server():
-    ip = get_ip('ens33')
+    # ip = get_ip('ens33')
+    ip = '10.17.98.14'
     if DEBUG:
         print('current ip:{}'.format(ip))
     PORT = 7000

@@ -16,7 +16,9 @@ def get_ip(ifname):
 PORT = 7000 ## ros udp server port
 
 def send_data(data, port=7000):
-    ip = get_ip('ens33')
+    # ip = get_ip('ens33')
+    ip = get_ip('wlp3s0')
+    print('ip:',ip)
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # for data in [b'mask', b'start spray']:
     # 发送数据:
@@ -30,5 +32,5 @@ def send_data(data, port=7000):
 
 
 if __name__ == '__main__':
-    info = 'angle:90'
+    info = 'angle:60'
     send_data(info)
