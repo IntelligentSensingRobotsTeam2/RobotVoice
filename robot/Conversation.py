@@ -29,6 +29,7 @@ class Conversation(object):
         self.onSay = None
         self.hasPardon = False
         self.adminState = time.time()  ## admin verify time
+        self.adminSwitch = False
 
     def getHistory(self):
         return self.history

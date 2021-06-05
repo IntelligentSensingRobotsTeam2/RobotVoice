@@ -35,7 +35,7 @@ class Wukong(object):
     _profiling = False
     _dev = False
     
-    def init(self):
+    def init(self,admin_mode=False):
         global conversation
         self.detector = None
         self._thinking = False
@@ -58,10 +58,12 @@ class Wukong(object):
         self.Mic_tuning = Tuning(dev)
 
         self._conversation = Conversation(self._profiling)
+        if admin_mode:
+            self._conversation.adminSwitch = True
 
         self.helloStr = '{} 你好！我叫{}！试试对我喊唤醒词叫醒我吧'.format(config.get('first_name', '主人'),config.getName())
         # self._conversation.say('{} 你好！试试对我喊唤醒词叫醒我吧'.format(config.get('first_name', '主人')), True)
-        self._conversation.say(self.helloStr, True)
+        self._conversation.say('语音交互已启动', True)
         self._observer = Observer()
         self.adminVerifyTime = time.time()  # last time of admin verified.
         event_handler = ConfigMonitor(self._conversation)
@@ -140,8 +142,8 @@ class Wukong(object):
                 query = self._conversation.activeListen()
                 self._conversation.doResponse(query)
 
-    def run(self):
-        self.init()
+    def run(self,admin=False):
+        self.init(admin_mode=admin)
 
         # capture SIGINT signal, e.g., Ctrl+C
         signal.signal(signal.SIGINT, self._signal_handler)
@@ -302,9 +304,14 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         wukong = Wukong()
         wukong.run()
+    elif len(sys.argv) == 2:  # 'python3 mainVoice.py admin'  turn on admin mode.
+        if sys.argv[1] == 'admin':
+            wukong = Wukong()
+            wukong.run(admin=True)
+        
     elif '-h' in (sys.argv):
         wukong = Wukong()
         wukong.help()
-    else:
-        fire.Fire(Wukong)
+    # else:
+    #     fire.Fire(Wukong)
 
