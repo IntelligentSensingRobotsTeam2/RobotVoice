@@ -28,7 +28,7 @@ python3 mainVoice.py
 python3 mainVoice.py admin 默认开启管理员模式
 ```
 ### 呼叫
-唤醒词'ABC'
+唤醒词'ABC'   
 重新训练唤醒词: https://wukong.hahack.com/#/tips?id=_2-%e4%bf%ae%e6%94%b9%e5%94%a4%e9%86%92%e8%af%8d
 
 ## 技能 ##
