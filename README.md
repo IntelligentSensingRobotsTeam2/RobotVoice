@@ -49,3 +49,9 @@ python3 mainVoice.py admin 默认开启管理员模式
 
 语音通过udp发送指令，可通过`cmdRecv/RosUdpServer.py`测试接受通讯。   
 
+## 仿真测试
+用turtlesim仿真测试。注意修改rosUdpServer发布的rostopic。   
+``` bash
+roscore
+rosrun turtlesim turtlesim_node
+``` 
