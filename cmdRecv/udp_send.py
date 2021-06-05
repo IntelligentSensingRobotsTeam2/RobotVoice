@@ -15,10 +15,11 @@ def get_ip(ifname):
 # ip = '192.168.50.135'
 PORT = 8000 ## 7000 ros udp server port.  8000 voice udp server.
 
-def send_data(data, port=7000):
+def send_data(data, port=7001):
+    PORT = port
     ip = get_ip('ens33')
     #ip = get_ip('wlp3s0')
-    print('ip:',ip)
+    print('ip:{} port {}'.format(ip,port))
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # for data in [b'mask', b'start spray']:
     # 发送数据:
@@ -32,6 +33,6 @@ def send_data(data, port=7000):
 
 
 if __name__ == '__main__':
-    #info = 'angle:60'
-    info = 'admin:1'
+    info = 'angle:180'
+    #info = 'admin:1'
     send_data(info)
