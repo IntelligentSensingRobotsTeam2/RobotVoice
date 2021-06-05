@@ -40,7 +40,8 @@ python3 mainVoice.py admin 默认开启管理员模式
 
 ### 管理员
 可通过启动时命令指令默认启动管理员权限   
-通过cmdRecv/cmdServer.py udp服务器接受消息   
+通过cmdRecv/cmdServer.py udp服务器接受消息(启动主程序后自动开启监听)
+(可通过`cmdRecv/RosUdpServer.py` 往server发送命令做测试。修改端口、ip)      
 在接受到管理员认证消息后('admin')20秒内唤醒‘开启管理员权限’即可开启。   
 
 机器人移动： ‘往前走/后退3米’ ‘左转/逆时针转30度’   
