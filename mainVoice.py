@@ -102,9 +102,14 @@ class Wukong(object):
     def _detected_callback(self):
         def start_record():
             if self._conversation.autoRotate:
-                arr_angle = self.Mic_tuning.direction
-                print('voice arriving angle:',arr_angle)
-                udp_send.send_data('rotate:{}'.format(arr_angle))
+                # arr_angle = self.Mic_tuning.direction
+                raw_angle = int(self.Mic_tuning.direction)
+                if raw_angle > 270:
+                    correct_angle = 180 - (raw_angle - 270)
+                else:
+                    correct_angle = -(raw_angle-90)
+                print('voice arriving angle:',correct_angle)
+                udp_send.send_data('rotate:{}'.format(correct_angle))
             logger.info('开始录音')
             self._conversation.isRecording = True
             utils.setRecordable(True)
