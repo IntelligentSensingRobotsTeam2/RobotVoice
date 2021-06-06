@@ -93,16 +93,18 @@ class Wukong(object):
 
     def _signal_handler(self, signal, frame):
         print('interupt')
-        self._conversation.say('请戴上口罩', True)
+        self._conversation.say('请按 control，加，4，退出程序。', True)
+        print('请按 { ctrl + 4 } 退出程序')
         self._interrupted = True
         utils.clean()
         self._observer.stop()
 
     def _detected_callback(self):
         def start_record():
-            arr_angle = self.Mic_tuning.direction
-            print('arrive angle:',arr_angle)
-            udp_send.send_data('angle:{}'.format(arr_angle))
+            if self._conversation.autoRotate:
+                arr_angle = self.Mic_tuning.direction
+                print('arrive angle:',arr_angle)
+                udp_send.send_data('angle:{}'.format(arr_angle))
             logger.info('开始录音')
             self._conversation.isRecording = True
             utils.setRecordable(True)

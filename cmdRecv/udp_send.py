@@ -33,6 +33,6 @@ def send_data(data, port=7001):
 
 
 if __name__ == '__main__':
-    info = 'angle:180'
-    #info = 'admin:1'
-    send_data(info)
+    #info = 'angle:180'
+    info = 'admin:1'
+    send_data(info,PORT)

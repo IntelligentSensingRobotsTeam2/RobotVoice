@@ -29,14 +29,18 @@ def execute_config(data):
     global speaker,lastWarningTime,lastHelloTime,firstHello
     curTime = time.time()
     cmd = data.split(':')[0]
-
+    value = int(data.split(':')[1])
     if cmd == 'say':
         if speaker is not None:
             speaker._conversation.say(data.split(':')[1], True)
 
     elif cmd == 'mask':  
-        if speaker is not None:
-            if curTime - lastWarningTime > 2:
+        if speaker is not None :
+            if value == 1 and (curTime - lastWarningTime > 20):
+                speaker._conversation.say(speaker.helloStr, True)
+                lastWarningTime = curTime
+
+            elif value == 0 and (curTime - lastWarningTime > 4):
                 speaker._conversation.say('请戴上口罩', True)
                 lastWarningTime = curTime
     

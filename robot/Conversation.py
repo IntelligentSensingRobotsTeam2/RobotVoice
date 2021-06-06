@@ -30,6 +30,8 @@ class Conversation(object):
         self.hasPardon = False
         self.adminState = time.time()  ## admin verify time
         self.adminSwitch = False
+        self.autoRotate = True
+        #print('debug conversation:',self.autoRotate)
 
     def getHistory(self):
         return self.history
