@@ -2,6 +2,7 @@
 ## run in python3
 import time
 import socket, fcntl, struct
+import argparse
 
 
 #client 发送端
@@ -13,10 +14,8 @@ def get_ip(ifname):
 
 
 # ip = '192.168.50.135'
-PORT = 8000 ## 7000 ros udp server port.  8000 voice udp server.
 
 def send_data(data, port=7001):
-    PORT = port
     ip = get_ip('ens33')
     #ip = get_ip('wlp3s0')
     print('ip:{} port {}'.format(ip,port))
@@ -24,7 +23,7 @@ def send_data(data, port=7001):
     # for data in [b'mask', b'start spray']:
     # 发送数据:
     enc_data = data.encode('utf-8')
-    s.sendto(enc_data, (ip, PORT))
+    s.sendto(enc_data, (ip, port))
     print('udp send:',data)
     # 接收数据:
     # receive_data, _ =s.recvfrom(1024)
@@ -33,6 +32,18 @@ def send_data(data, port=7001):
 
 
 if __name__ == '__main__':
-    #info = 'angle:180'
-    info = 'admin:1'
-    send_data(info,PORT)
+    
+    '''
+    run for help:  'python3 cmdRecv/udp_send.py -h'    
+    run example :   python3 cmdRecv/udp_send.py -Port 7000 -Data admin:1
+
+    '''
+    parser = argparse.ArgumentParser(description="UDP client to send data")
+    parser.add_argument('-Port', type=int, default=8000, help='UDP sent Port')
+    parser.add_argument('-Data', type=str, default='angle:180', help='UDP sent Data')
+    args = parser.parse_args()
+
+    PORT =args.Port
+    Data =args.Data
+
+    send_data(Data,PORT)

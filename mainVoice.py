@@ -18,7 +18,7 @@ from watchdog.observers import Observer
 from robot.Conversation import Conversation
 from robot.ConfigMonitor import ConfigMonitor
 from robot import config, utils, constants, logging, statistic, Player, BCI
-from cmdRecv import cmdServer
+from cmdRecv import voiceUdpServer
 # DOA angle
 from cmdRecv.tuning import Tuning
 from cmdRecv import udp_send
@@ -103,8 +103,8 @@ class Wukong(object):
         def start_record():
             if self._conversation.autoRotate:
                 arr_angle = self.Mic_tuning.direction
-                print('arrive angle:',arr_angle)
-                udp_send.send_data('angle:{}'.format(arr_angle))
+                print('voice arriving angle:',arr_angle)
+                udp_send.send_data('rotate:{}'.format(arr_angle))
             logger.info('开始录音')
             self._conversation.isRecording = True
             utils.setRecordable(True)
@@ -153,7 +153,7 @@ class Wukong(object):
         # site
         server.run(self._conversation, self)
 
-        cmdServer.run(self)
+        voiceUdpServer.run(self)
 
         statistic.report(0)
 

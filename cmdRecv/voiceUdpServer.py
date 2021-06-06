@@ -30,6 +30,7 @@ def execute_config(data):
     curTime = time.time()
     cmd = data.split(':')[0]
     value = int(data.split(':')[1])
+    
     if cmd == 'say':
         if speaker is not None:
             speaker._conversation.say(data.split(':')[1], True)
@@ -48,15 +49,23 @@ def execute_config(data):
         if speaker is not None:
             speaker.adminVerifyTime = curTime
             speaker._conversation.adminState = time.time()
-            if firstHello or curTime - lastHelloTime > 60:
+            if firstHello or curTime - lastHelloTime > 60: # say hello every 60 seconds
                 speaker._conversation.say('管理员您好', True)
                 lastHelloTime = curTime
                 firstHello = False
 
-    elif cmd == 'hello':
+    elif cmd == 'goal':
         if speaker is not None:
-            if curTime - max([lastHelloTime,lastWarningTime]) > 5:
-                speaker._conversation.say(speaker.helloStr, True)
+            if curTime - max([lastHelloTime,lastWarningTime]) > 5: # if speaker isn't saying anything at present.
+                speaker._conversation.say('目的地已到达，结束导航', True)
+
+    # elif cmd == 'hello':
+    #     if speaker is not None:
+    #         if curTime - max([lastHelloTime,lastWarningTime]) > 5:
+    #             speaker._conversation.say(speaker.helloStr, True)
+
+
+
     return
     
 def start_server():
