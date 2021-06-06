@@ -28,29 +28,41 @@ python3 mainVoice.py
 python3 mainVoice.py admin 默认开启管理员模式
 ```
 ### 呼叫
-唤醒词'ABC'   
+当前唤醒词'ABC'   
 重新训练唤醒词: https://wukong.hahack.com/#/tips?id=_2-%e4%bf%ae%e6%94%b9%e5%94%a4%e9%86%92%e8%af%8d
 
 ## 技能 ##
 
 ### 普通人
+
+#### 语音交互指令   
 询问天气： '北京明天会下雨吗'   
 咨询疫情: '佛山目前确诊人数有多少'   
 地点导航: '出口在哪里/洗手间怎么去/怎么去咨询台'   
 
+
+#### 注意
+当镜头前出现没戴口罩的人时会一直发出语音警告提醒。   
+
 ### 管理员
+
+#### 语音交互指令   
+开启/关闭唤醒词自动旋转：‘开启/关闭自动旋转’   
+机器人移动： ‘往前走/后退3米’ ‘左转/逆时针转30度’   
+消毒：‘开启/关闭消毒/喷洒’ ‘停下来’   
+巡航：‘开始/停止巡航’    
+
+#### 注意
 可通过启动时命令指令默认启动管理员权限   
 通过cmdRecv/cmdServer.py udp服务器接受消息(启动主程序后自动开启监听)   
 (可通过`cmdRecv/RosUdpServer.py` 往server发送命令做测试。修改端口、ip)      
-在接受到管理员认证消息后('admin')20秒内唤醒‘开启管理员权限’即可开启。   
-
-机器人移动： ‘往前走/后退3米’ ‘左转/逆时针转30度’   
-消毒：‘开启/关闭消毒/喷洒’ ‘停下来’   
+在接受到管理员认证消息后('admin')20秒内唤醒‘开启管理员权限’即可开启。 
 
 语音通过udp发送指令，可通过`cmdRecv/RosUdpServer.py`测试接受通讯。   
 
 ## 仿真测试
-用turtlesim仿真测试。注意修改rosUdpServer发布的rostopic。   
+可以使用turtlesim仿真测试语音控制机器人移动的效果。注意修改rosUdpServer发布的rostopic。   
+
 ``` bash
 roscore
 rosrun turtlesim turtlesim_node
