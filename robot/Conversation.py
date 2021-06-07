@@ -211,7 +211,7 @@ class Conversation(object):
             utils.check_and_delete(cache_path, 60) # 60秒后将自动清理不缓存的音频
         utils.lruCache()  # 清理缓存
 
-    def activeListen(self, silent=False):
+    def activeListen(self, silent=False,recording_len=None):
         """ 主动问一个问题(适用于多轮对话) """
         if config.get('/LED/enable', False):
             LED.wakeup()
@@ -220,9 +220,11 @@ class Conversation(object):
             if not silent:
                 Player.play(constants.getData('beep_hi.wav'))
             listener = snowboydecoder.ActiveListener([constants.getHotwordModel(config.get('hotword', 'wukong.pmdl'))])
+            if recording_len is None:
+                recording_len = config.get('recording_timeout', 5)* 4
             voice = listener.listen(
                 silent_count_threshold=config.get('silent_threshold', 15),
-                recording_timeout=config.get('recording_timeout', 5) * 4
+                recording_timeout=recording_len
             )
             if not silent:
                 Player.play(constants.getData('beep_lo.wav'))

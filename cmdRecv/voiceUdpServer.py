@@ -11,8 +11,9 @@ DEBUG = False   ## print debug information
 speaker =  None
 import time
 
-lastWarningTime = time.time()
-lastHelloTime = time.time()
+lastWarningTime = 0
+lastPassengerHelloTime = 0
+lastAdminHelloTime = 0
 firstHello = True
 
 def server_exit(signum, frame):
@@ -26,7 +27,7 @@ def get_ip(ifname):
     return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', bytes(ifname[:15],'utf-8')))[20:24])
 
 def execute_config(data):
-    global speaker,lastWarningTime,lastHelloTime,firstHello
+    global speaker,lastWarningTime,lastAdminHelloTime,firstHello,lastPassengerHelloTime
     curTime = time.time()
     cmd = data.split(':')[0]
     value = int(data.split(':')[1])
@@ -37,9 +38,9 @@ def execute_config(data):
 
     elif cmd == 'mask':  
         if speaker is not None :
-            if value == 1 and (curTime - lastWarningTime > 20):
+            if value == 1 and (curTime - lastPassengerHelloTime > 20):
                 speaker._conversation.say(speaker.helloStr, True)
-                lastWarningTime = curTime
+                lastPassengerHelloTime = curTime
 
             elif value == 0 and (curTime - lastWarningTime > 4):
                 speaker._conversation.say('请戴上口罩', True)
@@ -49,15 +50,15 @@ def execute_config(data):
         if speaker is not None:
             speaker.adminVerifyTime = curTime
             speaker._conversation.adminState = time.time()
-            if firstHello or curTime - lastHelloTime > 60: # say hello every 60 seconds
+            if firstHello or curTime - lastAdminHelloTime > 60: # say hello every 60 seconds
                 speaker._conversation.say('管理员您好', True)
                 lastHelloTime = curTime
                 firstHello = False
 
     elif cmd == 'goal':
         if speaker is not None:
-            if curTime - max([lastHelloTime,lastWarningTime]) > 5: # if speaker isn't saying anything at present.
-                speaker._conversation.say('目的地已到达，结束导航', True)
+            # if curTime - max([lastHelloTime,lastWarningTime]) > 5: # if speaker isn't saying anything at present.
+            speaker._conversation.say('目的地已到达，结束导航', True)
 
     # elif cmd == 'hello':
     #     if speaker is not None:
